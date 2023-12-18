@@ -51,7 +51,7 @@ class MathControllerUnitTest {
 
         // Assert
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertEquals("Cannot divide by 0", responseEntity.getBody().getError());
+        assertEquals("Cannot divide by 0", responseEntity.getBody().getData());
         verify(mathImpl, times(1)).doMath(5, 0, "/");
     }
 }
