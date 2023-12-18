@@ -1,30 +1,30 @@
 package term1exam.DevopsExam;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class MathControlE2eTest {
-
     @LocalServerPort
     private int port;
-
-    private final TestRestTemplate restTemplate = new TestRestTemplate();
-
+    @Autowired
+    private TestRestTemplate restTemplate;
     @Test
-    public void testDoMathEndpoint() {
-        String url = "http://localhost:" + port + "/api/math/doMath";  // Corrected endpoint
-        DoMathReq request = new DoMathReq(5, 4, "*");  // Prepare a sample request
-
-        // Perform the POST request and receive a ResponseEntity
-        ApiRes response = restTemplate.postForObject(url, request, ApiRes.class);
-
-        // Assert
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals(20.0, ((Map<String, Double>) response.getData()).get("calcResponse"));
+    public void testApiEndpoint() {
+        // Given
+        String url = "http://localhost:" + port + "/api/v1/do_math";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        String requestBody = "{\"operand1\": 2, \"operand2\": 5, \"operation\": \"+\"}";
+        // When
+        HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
+        String response = restTemplate.postForObject(url, request, String.class);
+        // Then
+        assertEquals("Expected Response", response);
     }
 }

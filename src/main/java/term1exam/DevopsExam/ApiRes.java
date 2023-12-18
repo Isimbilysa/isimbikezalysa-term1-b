@@ -36,4 +36,6 @@ public class ApiRes {
     public static ApiRes fail(String message) {
         return new ApiRes(false, message);
     }
+
+
 }
